@@ -4,11 +4,20 @@ class Car {
       this.name = name;
       this.brand = brand;
       this.price = price;
-      this.quantity = quantity;
+      this.quantity = Number(quantity);
       this.img = img;
     }
 
     get sum() {
       return this.price * this.quantity;
+    }
+
+    
+    status(){
+        if(this.quantity > 0){
+            return " Còn hàng";
+        }else{
+        return "Hết Hàng";
+    }
     }
 }

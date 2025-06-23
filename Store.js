@@ -10,11 +10,13 @@ class Store {
         this.listCar = [];
         this.getDataInStorage();
     }
-add(newCar){
+
+    add(newCar){
   this.listCar.push(newCar);
   this.saveDataInStorage();
 
 }
+
 remove(id){
     let index = -1;
     for(let i = 0; i < this.listCar.length;i++){
@@ -72,4 +74,17 @@ getDataInStorage() {
         this.listCar = [];
     }
 }
+     output(nameSearch) {
+    let listOuput = [];
+    for(let i= 0; i < this.listCar.length;i++){
+    let Car = this.listCar[i];
+    if(Car.name.toLowerCase().includes(nameSearch.toLowerCase())){
+        listOuput.push(Car);
+    }   
 }
+ return listOuput;
+}
+
+}
+
+
