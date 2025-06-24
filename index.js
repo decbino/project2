@@ -38,7 +38,7 @@ function navToHome() {
     <button onclick="navToHome()">Home</button>
     <button onclick="navToAdd()">Thêm sản phẩm</button>
     <button onclick="handleLogout()">Đăng xuất</button>
-    <button onclick= "viewCart()">Đơn hàng</button>
+    <button onclick= "viewCart()">Đơn hàng </button>
     <input id = "search" placeholder = " Tìm kiếm xe" oninput="search()">
     <table border="1">
             <tr>
@@ -185,11 +185,13 @@ function viewCart() {
                 <th>Hình ảnh</th>
                 <th>Thành tiền</th>
                 <th>Xóa</th>
+                <th>Thanh Toán</th>
             </tr>
     `;
 
     let total = 0;
-    for (let car of cart) {
+    for (let i = 0; i < cart.length;i++) {
+        let car = cart[i];
         let sum = car.price * car.quantity;
         total += sum;
         html += `
@@ -200,6 +202,7 @@ function viewCart() {
                 <td><img src="${car.img}" width="80"/></td>
                 <td>${sum.toLocaleString('vi-VN')}</td>
                 <td><button onclick="removeFromCart(${car.id})">Xóa</button></td>
+               <td> <button onclick = "payment()">Thanh toán</button></td>
             </tr>
         `;
     }
@@ -208,6 +211,8 @@ function viewCart() {
         <tr>
             <td colspan="4"><strong>Tổng cộng</strong></td>
             <td colspan="2"><strong>${total.toLocaleString('vi-VN')} VND</strong></td>
+            
+            
         </tr>
         </table>
     `;
@@ -255,6 +260,26 @@ function addtoCart(id){
         });
     }
 alert("đã thêm vào giỏ hàng");
+}
+
+function payment(){
+    document.getElementById("ui").innerHTML = `
+    <div>
+     <button onclick="viewCart()">← Quay lại</button>
+    <h3>Thông tin khách hàng</h3>
+    <form method = " post">
+    <label>Họ và tên </label><br><br>
+    <input placeholder = " Điền họ và tên"><br><br>
+    <label>Địa chỉ </label><br><br>
+    <input placeholder = " Địa chỉ"><br><br>
+    <label>SĐT </label><br><br>
+    <input placeholder = " SĐT"><br><br>
+    <label>email</label><br><br>
+    <input placeholder = " email"><br><br>
+    <button>Gửi</button>
+    </form>
+    </div>
+    `
 }
 
 navToHome();
