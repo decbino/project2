@@ -1,6 +1,6 @@
 let myCar = new Store(1,"Garage", "Volvo");
 console.log("myCar", myCar);
-
+let cart = [];
 
 function getAll(list) {
     let html = ``;
@@ -16,6 +16,7 @@ html += `
     <td><img src="${car.img}" width="100"/></td>
     <td>${car.status()}</td>
      <td title="${car.sum.toLocaleString('vi-VN')}">${car.sum.toLocaleString('vi-VN')}</td>
+    <td><button onclick = "addtoCart(${car.id})">Mua xe</button></td>
     <td><button onclick="navigateToUpdate(${car.id})">Sửa</button></td>
     <td><button onclick="deleteCar(${car.id})">Xóa</button></td>
   </tr>
@@ -36,7 +37,8 @@ function navToHome() {
     <h2>Danh sách xe</h2>
     <button onclick="navToHome()">Home</button>
     <button onclick="navToAdd()">Thêm sản phẩm</button>
-    <button onclick="handleLogout()">Đăng xuất</button
+    <button onclick="handleLogout()">Đăng xuất</button>
+    <button onclick= "viewCart()">Đơn hàng</button>
     <input id = "search" placeholder = " Tìm kiếm xe" oninput="search()">
     <table border="1">
             <tr>
@@ -48,7 +50,7 @@ function navToHome() {
                 <th>Hình Ảnh</th>
                 <th>Tình Trạng</th>
                 <th>Thành Tiền</th>
-                <th colspan="2">Action</th>
+                <th colspan="3">Action</th>
             </tr>
             <tbody id="list_products">
             </tbody>
@@ -171,6 +173,89 @@ function search(){
     getAll(list);
 }
 
+function viewCart() {
+    let html = `
+        <h2>Giỏ Hàng</h2>
+        <button onclick="navToHome()">← Quay lại</button>
+        <table border="1">
+            <tr>
+                <th>Tên xe</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Hình ảnh</th>
+                <th>Thành tiền</th>
+                <th>Xóa</th>
+            </tr>
+    `;
+
+    let total = 0;
+    for (let car of cart) {
+        let sum = car.price * car.quantity;
+        total += sum;
+        html += `
+            <tr>
+                <td>${car.name}</td>
+                <td>${car.price.toLocaleString('vi-VN')}</td>
+                <td>${car.quantity}</td>
+                <td><img src="${car.img}" width="80"/></td>
+                <td>${sum.toLocaleString('vi-VN')}</td>
+                <td><button onclick="removeFromCart(${car.id})">Xóa</button></td>
+            </tr>
+        `;
+    }
+
+    html += `
+        <tr>
+            <td colspan="4"><strong>Tổng cộng</strong></td>
+            <td colspan="2"><strong>${total.toLocaleString('vi-VN')} VND</strong></td>
+        </tr>
+        </table>
+    `;
+
+    document.getElementById("ui").innerHTML = html;
+}
+function removeFromCart(id){
+    let isConfirm = confirm("Bạn có muốn xóa đơn hàng?");
+    if(isConfirm){
+        let index = -1;
+        for(let i = 0; i < cart.length;i++){
+            let p = cart[i];
+            if(p.id === id){
+                index = i;
+                break;
+            }
+        }
+        if(index !== -1){
+            cart.splice(index,1);
+            viewCart();
+        }
+        
+}
+}
+
+function addtoCart(id){
+    
+    let car = myCar.getListCarbyId(id);
+    let index = -1;
+    for(let i = 0; i < cart.length;i++){
+        if (cart[i].id === id) {
+            index = i;
+            break;
+        }
+    }
+    if(index !== -1){
+        cart[index].quantity += 1;
+    }else{
+        cart.push({
+            id : car.id,
+            name : car.name,
+            price: car.price,
+            quantity: 1,
+            img: car.img
+        });
+    }
+alert("đã thêm vào giỏ hàng");
+}
 
 navToHome();
 
